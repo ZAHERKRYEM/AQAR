@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +14,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+use App\Http\Controllers\UserController;  
+use App\Http\Controllers\PropertyController;  
+
+Route::prefix('v1')->group(function () {
+
+    Route::post('register', [UserController::class, 'register']);  
+    Route::post('login', [UserController::class, 'login']); 
+    Route::get('properties', [PropertyController::class, 'index']);
+    Route::get('properties/{id}', [PropertyController::class, 'show']);  
 });
+
+Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
+    Route::post('logout', [UserController::class, 'logout']);
+    Route::get('users', [UserController::class, 'index']);  
+    Route::post('properties', [PropertyController::class, 'store']);  
+});
+ 
+
+
+require __DIR__ .'/admin.php';
