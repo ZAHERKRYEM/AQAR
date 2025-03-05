@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Property;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\Admin\StorePropertyRequest;
+use App\Http\Requests\Admin\UpdatePropertyRequest;
 class PropertyController extends Controller
 {
     public function __construct()
@@ -22,20 +22,11 @@ class PropertyController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePropertyRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string',
-            'property_type' => 'required|string',
-            'transaction_type' => 'required|string',
-            'price' => 'required|numeric',
-            'area' => 'required|numeric',
-            'city' => 'required|string',
-            'neighborhood' => 'required|string',
-            'owner' => 'required|exists:users,id',
-        ]);
+     
 
-        $property = Property::create($request->all());
+        $property = Property::create($request->validated());
         return response()->json([
             'status' => 'success',
             'data' => $property,
@@ -54,19 +45,11 @@ class PropertyController extends Controller
         ]);
     }
 
-    public function update(Request $request, Property $property)
+    public function update(UpdatePropertyRequest $request, Property $property)
     {
-        $request->validate([
-            'title' => 'string',
-            'property_type' => 'string',
-            'transaction_type' => 'string',
-            'price' => 'numeric',
-            'area' => 'numeric',
-            'city' => 'string',
-            'neighborhood' => 'string',
-        ]);
+    
 
-        $property->update($request->all());
+        $property->update($request->validated());
         return response()->json([
             'status' => 'success',
             'data' => $property,

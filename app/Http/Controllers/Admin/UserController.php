@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use App\Http\Requests\Admin\StoreUserRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
 class UserController extends Controller
 {
     public function __construct()
@@ -23,16 +23,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'username' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'phone' => 'required|string',
-            'password' => 'required|string|min:6',
-            'user_type' => 'string',
-        ]);
-
+       
         $user = User::create([
             'username' => $request->username,
             'email' => $request->email,
@@ -59,17 +52,11 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $request->validate([
-            'username' => 'string',
-            'email' => 'email|unique:users,email,' . $user->id,
-            'phone' => 'string',
-            'password' => 'nullable|string|min:6',
-            'user_type' => 'string',
-        ]);
+        $user->update($request->validated());
 
-        $user->update($request->only(['username', 'email', 'phone', 'user_type']));
+       
         if ($request->password) {
             $user->password = Hash::make($request->password);
             $user->save();
