@@ -21,6 +21,9 @@ Route::prefix('v1')->group(function () {
 
     Route::post('register', [UserController::class, 'register']);  
     Route::post('login', [UserController::class, 'login']); 
+    Route::post('verify-email', [UserController::class, 'verifyEmail']);
+    Route::post('resend-verification-code', [UserController::class, 'resendVerificationCode']);
+
     Route::get('properties', [PropertyController::class, 'index']);
     Route::get('properties/{id}', [PropertyController::class, 'show']);  
 });
@@ -31,6 +34,5 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::post('properties', [PropertyController::class, 'store']);  
 });
  
-
 
 require __DIR__ .'/admin.php';

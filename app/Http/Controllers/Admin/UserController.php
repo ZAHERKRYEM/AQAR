@@ -30,6 +30,7 @@ class UserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'phone' => $request->phone,
+            'is_verified'=>true,
             'password' => Hash::make($request->password),
             'user_type' => $request->user_type ?? 'seller',
         ]);

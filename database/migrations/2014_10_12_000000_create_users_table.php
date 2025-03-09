@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();  
             $table->string('verification_code')->nullable();  
             $table->boolean('is_verified')->default(false);  
-            $table->string('phone');  
+            $table->string('phone')->unique();  
             $table->string('password');  
-            $table->string('user_type')->default('seller');  
+            $table->enum('user_type', ['seller','admin'])->default('seller');  
             $table->timestamps();  
         });
     }
